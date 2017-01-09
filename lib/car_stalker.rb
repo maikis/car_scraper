@@ -5,11 +5,10 @@ require 'car_stalker/autoplius_scraper'
 # the search. It looks like folowing:
 #
 # car_specs = {
-#   make: 'BMW',
-#   model: '330',
-#   fuel_type: 'diesel',
-#   price_to: 15000
-# }
+#   make_id_list: 'Audi',
+#   make_id_sublist_portal: 'A3',
+#   kilometrage_to: '20000',
+#   make_date_from: 2016 }
 #
 # More information about specs config can be found in documentation.
 #
