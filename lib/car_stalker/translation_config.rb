@@ -26,7 +26,7 @@ module CarStalker
                                type: :select } },
     price_from: { autoplius: { field: :sell_price_from,
                                type: :select } },
-    price_to:   { autoplius: { field: :make_id_sublist_portal,
+    price_to:   { autoplius: { field: :sell_price_to,
                                type: :select } },
     fuel_type:  { autoplius: { field: :fuel_id,
                                options: ['Diesel',
