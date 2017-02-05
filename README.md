@@ -69,16 +69,47 @@ Currently it is only possible to provide car specs by autoplius search form's se
   power_to,
   kilometrage_from,
   kilometrage_to,
-  damaged ['No damages', 'Crashed'],
+  damaged: [
+    :no,
+    :yes
+  ],
   year_from,
   year_to,
   price_from,
   price_to,
-  fuel_type ['Diesel', 'Petrol', 'Petrol / LPG', 'Petrol / electricity', 'Electricity', 'Diesel / electricity', 'Other'],
-  gearbox ['Automatic' 'Manual'],
-  body_type ['Saloon / sedan', 'Hatchback', 'Coupe', 'MPV / minivan', 'SUV / off-road', 'Wagon', 'Convertible / Roadster', 'Limousine', 'Other'],
-  driven_wheels ['Front wheel drive (FWD)', 'Rear wheel drive (RWD)', 'All wheel (4x4)'],
-  steering_wheel_side ['Left hand drive (LHD)', 'Right hand drive (RHD)']
+  fuel_type: [
+    diesel: 'Diesel',
+    petrol: 'Petrol',
+    petrol_lpg: 'Petrol / LPG',
+    petrol_ev:  'Petrol / electricity',
+    ev: 'Electricity',
+    diesel_ev: 'Diesel / electricity',
+    other: 'Other'
+  ],
+  gearbox: [
+    :automatic,
+    :manual
+  ],
+  body_type: [
+    sedan: 'Saloon / sedan',
+    hatchback: 'Hatchback',
+    coupe: 'Coupe',
+    minivan: 'MPV / minivan',
+    suv: 'SUV / off-road',
+    wagon: 'Wagon',
+    convertible: 'Convertible / Roadster',
+    limousine: 'Limousine',
+    other: 'Other'
+  ],
+  driven_wheels: [
+    fwd: 'Front wheel drive (FWD)',
+    rwd: 'Rear wheel drive (RWD)',
+    awd: 'All wheel (4x4)'
+  ],
+  steering_wheel_side [
+    lhd: 'Left hand drive (LHD)',
+    rhd: 'Right hand drive (RHD)'
+  ]
 ```
 
 ## TODO
