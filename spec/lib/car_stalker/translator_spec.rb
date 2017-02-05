@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CarStalker::Translator do
-  it 'transaltes for autoplius' do
+  it 'translates specs without options' do
     specs = { make: 'Volkswagen',
               model: 'Golf',
               kilometrage_to: '70000',
@@ -13,5 +13,17 @@ describe CarStalker::Translator do
                kilometrage_to: '70000',
                make_date_from: 2012,
                sell_price_to: '10000' })
+  end
+
+  it 'translates options' do
+    specs = { damaged: :no,
+              fuel_type: :petrol,
+              gearbox: :automatic,
+              body_type: :hatchback }
+    expect(CarStalker::Translator.translate(specs)[:autoplius])
+      .to eq(has_damaged_id: 'No damages',
+             fuel_id: 'Petrol',
+             gearbox_id: 'Automatic',
+             body_type_id: 'Hatchback')
   end
 end

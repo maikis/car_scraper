@@ -18,8 +18,16 @@ module CarStalker
         CarStalker::TRANSLATION_CONFIG.fetch(spec.to_sym)
       end
 
+      def handle_value(value, mapping)
+        if mapping.include?(:options)
+          return translate_value(value, mapping[:options])
+        end
+        value
+      end
+
       def translate_spec(spec, value, translated_specs)
         car_spec_data(spec).each do |site, mapping|
+          value = handle_value(value, mapping)
           field = mapping.fetch(:field)
           if translated_specs.key?(site)
             translated_specs[site].merge!(:"#{field}" => value)
@@ -28,6 +36,11 @@ module CarStalker
           end
         end
         translated_specs
+      end
+
+      def translate_value(value, options)
+        options.fetch(value.to_sym)
+        # TODO: Raise error if option not found.
       end
     end
   end
