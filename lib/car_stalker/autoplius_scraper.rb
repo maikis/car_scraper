@@ -11,7 +11,7 @@ module CarStalker
     def initialize
       # TODO: Find where to put configuration.
       Capybara.javascript_driver = :poltergeist
-      @starting_page = 'http://autoplius.lt/paieska/naudoti-automobiliai'
+      @starting_page = 'http://en.autoplius.lt/search/used-cars'
       @ad_link_xpath = '//h2[@class="title-list"]/a/@href'
       @pagination_ul_xpath =
         '//div[@class="paging-panel paging-bot"]/ul[@class="paging"]'
@@ -43,7 +43,7 @@ module CarStalker
 
     def main_page_html(car_specs)
       fill_in_search_form(car_specs)
-      session.click_on('Ieškoti')
+      session.click_on('Search')
       session.html
     end
 
