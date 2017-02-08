@@ -2,9 +2,12 @@
 module CarStalker
   TRANSLATION_CONFIG = {
     make:  { autoplius: { field: :make_id_list,
-                          type: :select } },
+                          type: :select },
+             autogidas: { fileld: :f_1,
+                          type: :hidden_field } },
     model: { autoplius: { field: :make_id_sublist_portal,
-                          type: :select } },
+                          type: :select },
+             autogidas: { field: :f_model_14 } },
     engine_capacity_from: { autoplius: { field: :engine_capacity_from,
                                          type: :select } },
     engine_capacity_to:   { autoplius: { field: :engine_capacity_to,
