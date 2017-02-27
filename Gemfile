@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'capybara', '~> 2.11'
+gem 'mechanize', '~> 2.7', '>= 2.7.5'
 gem 'nokogiri', '~> 1.7', '>= 1.7.0.1'
 gem 'poltergeist', '~> 1.13'
 

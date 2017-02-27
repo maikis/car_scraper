@@ -1,56 +1,55 @@
-require 'capybara'
-require 'capybara/poltergeist'
+require 'mechanize'
 
 module CarStalker
   # Scraper class for Autogidas site.
   class AutogidasScraper
-    attr_reader :starting_page, :pagination_xpath_string
+    attr_reader :starting_page_url, :mechanic, :search_page, :search_form,
+                :link_xpath_string, :base_page_url
 
     def initialize
-      Capybara.javascript_driver = :poltergeist
-      @starting_page = 'http://en.autogidas.lt/paieska/automobiliai/'
-      @pagination_xpath_string = ''
+      @base_page_url = 'http://www.autogidas.lt'
+      @starting_page_url = 'http://en.autogidas.lt/paieska/automobiliai/'
+      @link_xpath_string =
+        '//div[@class="all-ads-block"]/a[@class="item-link"]/@href'
+      @mechanic = Mechanize.new
     end
 
     def get_links(car_specs)
-      car_specs = CarStalker::Translator.translate(car_specs).fetch(:autogidas)
-      scrape_with_pagination(main_page_html(car_specs))
+      translated_specs = CarStalker::Translator
+                         .translate(car_specs)
+                         .fetch(:autogidas)
+      scrape_results(translated_specs)
     end
 
     private
 
-    def main_page_html(car_specs)
-      fill_in_search_form(car_specs)
-      session.click_on('Search')
-      session.html
+    def search_page
+      @search_page ||= mechanic.get(starting_page_url)
     end
 
-    def scrape_with_pagination(main_page_html)
-      nokogiri_page = to_nokogiri_page(main_page_html)
-      @all_pages = page_numbers(nokogiri_page)
-      # Sometimes we have only few results and no pagination...
-      return scrape_page(main_page_html) if all_pages.empty?
-      paginated_scrape(all_pages.first, [])
+    def search_form
+      @search_form ||= search_page.form_with(id: 'submit-form')
     end
 
-    def fill_in_search_form(car_specs)
-      visit_search_form_page
-      car_specs.each do |field, value|
-        session.select(value.to_s, from: field.to_s)
+    def scrape_results(translated_specs)
+      fill_in_search_form(translated_specs)
+      results = search_form.submit
+      extract_links(to_nokogiri_page(results.body))
+    end
+
+    def fill_in_search_form(translated_specs)
+      translated_specs.each do |field, value|
+        search_form.add_field!(field.to_s, value)
       end
-    end
-
-    def visit_search_form_page
-      session.visit(starting_page)
-      sleep(2)
     end
 
     def to_nokogiri_page(html_page)
       Nokogiri::HTML(html_page)
     end
 
-    def page_numbers(nokogiri_page)
-      nokogiri_page.xpath(pagination_xpath_string).map(&:text)
+    def extract_links(nokogiri_page)
+      nokogiri_links = nokogiri_page.xpath(link_xpath_string)
+      nokogiri_links.map { |link| "#{base_page_url}#{link.value}" }
     end
   end
 end
