@@ -1,4 +1,5 @@
 require 'car_stalker/autoplius_scraper'
+require 'car_stalker/autogidas_scraper'
 require 'car_stalker/translator'
 
 # Main interface for users to interact with the lib. It expects car specs with
@@ -18,5 +19,6 @@ require 'car_stalker/translator'
 module CarStalker
   def self.get_links(car_specs)
     CarStalker::AutopliusScraper.new.get_links(car_specs)
+    CarStalker::AutogidasScraper.new.get_links(car_specs)
   end
 end
