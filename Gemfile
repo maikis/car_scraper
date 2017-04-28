@@ -8,5 +8,6 @@ gem 'poltergeist', '~> 1.13'
 group :test, :development do
   gem 'byebug', '~> 9.0', '>= 9.0.5'
   gem 'rspec', '~> 3.5'
+  gem 'rubocop', '~> 0.48.1'
   gem 'webmock', '~> 2.1'
 end
