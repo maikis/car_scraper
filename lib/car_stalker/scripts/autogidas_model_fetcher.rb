@@ -1,7 +1,12 @@
 #
 #
-# This get's all the models for each make. This is a lot of traffic,
-# so please use with care only if it's necessary in respect of Autogidas.
+# !!! VERY IMPORTANT !!!
+#
+# The make and model data is already scraped and put into 'lib/car_stalker/data'
+# directory. So please scrape it again only if you are sure that there are
+# critical model changes in autogidas (which is very unlikely)! This get's all
+# the models for each make. This is a lot of traffic for autogidas, so please
+# use with care and only if it's necessary, in respect of Autogidas.
 #
 #
 
