@@ -1,3 +1,5 @@
+require 'car_stalker/data/autoplius_models'
+require 'car_stalker/data/autogidas_models'
 require 'car_stalker/autoplius_scraper'
 require 'car_stalker/autogidas_scraper'
 require 'car_stalker/translator'
