@@ -5,11 +5,13 @@ describe CarStalker::Translator do
     specs = { make: 'Volkswagen', model: 'Golf' }
 
     it 'translates specs for autoplius' do
-      expect(described_class.translate(specs)).to include(:autoplius)
+      expect(described_class.translate(specs, :autoplius))
+        .to include(:autoplius)
     end
 
     it 'translates specs for autogidas' do
-      expect(described_class.translate(specs)).to include(:autogidas)
+      expect(described_class.translate(specs, :autogidas))
+        .to include(:autogidas)
     end
   end
 
@@ -19,7 +21,7 @@ describe CarStalker::Translator do
                 fuel_type: :petrol,
                 gearbox: :automatic,
                 body_type: :hatchback }
-      expect(described_class.translate(specs).fetch(:autoplius))
+      expect(described_class.translate(specs, :autoplius).fetch(:autoplius))
         .to eq(has_damaged_id: 'No damages',
                fuel_id: 'Petrol',
                gearbox_id: 'Automatic',
@@ -28,7 +30,7 @@ describe CarStalker::Translator do
 
     it 'raises CarStalker::UnsupportedSpecError if make is not supported' do
       specs = { make: 'Unknown_make' }
-      expect { described_class.translate(specs) }
+      expect { described_class.translate(specs, :autoplius) }
         .to raise_error do |error|
           expect(error).to be_a(CarStalker::UnsupportedSpecError)
           expect(error.message).to eq('Unsupported spec.')
@@ -46,7 +48,7 @@ describe CarStalker::Translator do
                 fuel_type: :petrol,
                 gearbox: :automatic,
                 body_type: :hatchback }
-      expect(described_class.translate(specs).fetch(:autogidas))
+      expect(described_class.translate(specs, :autogidas).fetch(:autogidas))
         .to eq(f_46: 'Be defektų',
                f_2: 'Benzinas',
                f_10: 'Automatinė',
@@ -57,7 +59,7 @@ describe CarStalker::Translator do
       # Abarth is known to autoplius, so it does not fail on autoplius
       # translation, which goes before autogidas.
       specs = { make: 'Abarth' }
-      expect { described_class.translate(specs) }
+      expect { described_class.translate(specs, :autogidas) }
         .to raise_error do |error|
           expect(error).to be_a(CarStalker::UnsupportedSpecError)
           expect(error.message).to eq('Unsupported spec.')
