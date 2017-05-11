@@ -3,6 +3,7 @@ require 'car_stalker/data/autogidas_models'
 require 'car_stalker/autoplius_scraper'
 require 'car_stalker/autogidas_scraper'
 require 'car_stalker/translator'
+require 'car_stalker/errors'
 
 # Main interface for users to interact with the lib. It expects car specs with
 # basic information, such as make, model, price, fuel type etc. to be given for

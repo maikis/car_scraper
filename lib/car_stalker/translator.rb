@@ -21,9 +21,9 @@ module CarStalker
         CarStalker::TRANSLATION_CONFIG.fetch(spec.to_sym)
       end
 
-      def handle_value(spec, value, mapping)
+      def handle_value(spec, value, mapping, web_site)
         if spec == :make
-          # TODO: Validate make
+          validate_value(value, mapping.fetch(:options), spec, web_site)
           return value
         elsif spec == :model
           # TODO: Validate model
@@ -38,7 +38,7 @@ module CarStalker
 
       def translate_spec(spec, value, translated_specs)
         car_spec_data(spec).each do |web_site, mapping|
-          site_value = handle_value(spec, value, mapping)
+          site_value = handle_value(spec, value, mapping, web_site)
           field = mapping.fetch(:field)
           if translated_specs.key?(web_site)
             translated_specs[web_site].merge!(:"#{field}" => site_value)
@@ -54,8 +54,13 @@ module CarStalker
         # TODO: Raise error if option not found.
       end
 
-      def validate_value(value, options)
-        options.include?(value)
+      def validate_value(value, options, spec, web_site)
+        return if options.include?(value.to_sym)
+        message = 'Unsupported spec.'
+        details = {
+          :"#{spec}" => "Make '#{value}' is not supported by '#{web_site}'."
+        }
+        raise CarStalker::UnsupportedSpecError.new(message, details)
       end
     end
   end

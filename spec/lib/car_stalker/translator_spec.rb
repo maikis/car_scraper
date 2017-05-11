@@ -3,7 +3,7 @@ require 'spec_helper'
 describe CarStalker::Translator do
   describe 'target specific translations' do
     specs = { make: 'Volkswagen', model: 'Golf' }
-    
+
     it 'translates specs for autoplius' do
       expect(described_class.translate(specs)).to include(:autoplius)
     end
@@ -25,6 +25,19 @@ describe CarStalker::Translator do
                gearbox_id: 'Automatic',
                body_type_id: 'Hatchback')
     end
+
+    it 'raises CarStalker::UnsupportedSpecError if make is not supported' do
+      specs = { make: 'Unknown_make' }
+      expect { described_class.translate(specs) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              make: "Make '#{specs[:make]}' is not supported by 'autoplius'."
+            )
+        end
+    end
   end
 
   describe 'autogidas' do
@@ -38,6 +51,21 @@ describe CarStalker::Translator do
                f_2: 'Benzinas',
                f_10: 'Automatinė',
                f_3: 'Hečbekas')
+    end
+
+    it 'raises CarStalker::UnsupportedSpecError if make is not supported' do
+      # Abarth is known to autoplius, so it does not fail on autoplius
+      # translation, which goes before autogidas.
+      specs = { make: 'Abarth' }
+      expect { described_class.translate(specs) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              make: "Make '#{specs[:make]}' is not supported by 'autogidas'."
+            )
+        end
     end
   end
 end
