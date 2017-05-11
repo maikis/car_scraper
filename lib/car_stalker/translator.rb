@@ -5,6 +5,7 @@ module CarStalker
   class Translator
     class << self
       def translate(car_specs, website)
+        validate_specs(car_specs, website)
         translated_specs = {}
         car_specs.each do |spec, value|
           translated_specs = translate_spec(spec,
@@ -23,7 +24,6 @@ module CarStalker
 
       def handle_value(spec, value, mapping, website)
         if spec == :make
-          validate_value(value, mapping.fetch(:options), spec, website)
           return value
         elsif spec == :model
           # TODO: Validate model
@@ -53,12 +53,21 @@ module CarStalker
         # TODO: Raise error if option not found.
       end
 
-      def validate_value(value, options, spec, website)
-        return if options.include?(value.to_sym)
+      def validate_specs(car_specs, website)
+        details = {}
         message = 'Unsupported spec.'
-        details = {
-          :"#{spec}" => "Make '#{value}' is not supported by '#{website}'."
-        }
+
+        unless car_specs[:make].nil?
+          options = car_spec_data(:make, website).fetch(:options, {})
+          value   = car_specs[:make].to_sym
+          unless options.include?(value)
+            details = {
+              make: "Make '#{value}' is not supported by '#{website}'."
+            }
+          end
+        end
+
+        return if details.empty?
         raise CarStalker::UnsupportedSpecError.new(message, details)
       end
     end
