@@ -4,13 +4,10 @@ module CarStalker
   # Converter from user friendly car_spec config to specific page config.
   class Translator
     class << self
-      attr_reader :car_specs
-
       def translate(car_specs)
-        @car_specs = car_specs
         translated_specs = {}
         car_specs.each do |spec, value|
-          translated_specs = translate_spec(spec, value, translated_specs)
+          translated_specs = translate_specs(spec, value, translated_specs)
         end
         translated_specs
       end
@@ -36,7 +33,7 @@ module CarStalker
         value
       end
 
-      def translate_spec(spec, value, translated_specs)
+      def translate_specs(spec, value, translated_specs)
         car_spec_data(spec).each do |web_site, mapping|
           site_value = handle_value(spec, value, mapping, web_site)
           field = mapping.fetch(:field)
