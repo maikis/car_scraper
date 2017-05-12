@@ -57,17 +57,30 @@ module CarStalker
         details = {}
         message = 'Unsupported spec.'
 
-        unless car_specs[:make].nil?
+        if car_specs[:make].nil?
+          # Model is present, but make is missing.
+          unless car_specs[:model].nil?
+            details[:model] = "Model can't be passed alone: it is dependent on"\
+                              ' make.'
+          end
+        else
           options = car_spec_data(:make, website).fetch(:options, {})
           value   = car_specs[:make].to_sym
-          unless options.include?(value)
-            details = {
-              make: "Make '#{value}' is not supported by '#{website}'."
-            }
+          # Make is not supported.
+          if options.include?(value)
+            options = car_spec_data(:model, website).fetch(:options, {})
+            value   = car_specs[:model].to_s
+            # Make is present and supported, but model is not supported.
+            unless options[car_specs[:make].to_sym].include?(value)
+              details[:model] = "Model '#{value}' is not supported by"\
+                                " '#{website}'."
+            end
+          else
+            details[:make] = "Make '#{value}' is not supported by '#{website}'."
           end
         end
 
-        return if details.empty?
+        return car_specs if details.empty?
         raise CarStalker::UnsupportedSpecError.new(message, details)
       end
     end

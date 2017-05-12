@@ -40,6 +40,33 @@ describe CarStalker::Translator do
             )
         end
     end
+
+    it 'raises CarStalker::UnsupportedSpecError if make is missing when model'\
+       ' is present' do
+      specs = { model: 'Golf' }
+      expect { described_class.translate(specs, :autoplius) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              model: "Model can't be passed alone: it is dependent on make."
+            )
+        end
+    end
+
+    it 'raises CarStalker::UnsupportedSpecError if model is not supported' do
+      specs = { make: 'Volkswagen', model: 'Unsupported' }
+      expect { described_class.translate(specs, :autoplius) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              model: "Model '#{specs[:model]}' is not supported by 'autoplius'."
+            )
+        end
+    end
   end
 
   describe 'autogidas' do
@@ -66,6 +93,33 @@ describe CarStalker::Translator do
           expect(error.details)
             .to eq(
               make: "Make '#{specs[:make]}' is not supported by 'autogidas'."
+            )
+        end
+    end
+
+    it 'raises CarStalker::UnsupportedSpecError if make is missing when model'\
+       ' is present' do
+      specs = { model: 'Golf' }
+      expect { described_class.translate(specs, :autogidas) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              model: "Model can't be passed alone: it is dependent on make."
+            )
+        end
+    end
+
+    it 'raises CarStalker::UnsupportedSpecError if model is not supported' do
+      specs = { make: 'Volkswagen', model: 'Unsupported' }
+      expect { described_class.translate(specs, :autogidas) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              model: "Model '#{specs[:model]}' is not supported by 'autogidas'."
             )
         end
     end
