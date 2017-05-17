@@ -80,7 +80,21 @@ module CarStalker
           end
         end
 
-        return car_specs if details.empty?
+        car_specs.each do |spec, value|
+          next if spec == :make
+          next if spec == :model
+
+          options = car_spec_data(spec, website).fetch(:options, {})
+          value   = car_specs[spec]
+
+          case options
+          when Range
+            next if options.include?(value)
+            details[spec] = "Must be in range #{options}"
+          end
+        end
+
+        return if details.empty?
         raise CarStalker::UnsupportedSpecError.new(message, details)
       end
     end

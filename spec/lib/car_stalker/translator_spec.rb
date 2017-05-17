@@ -67,6 +67,34 @@ describe CarStalker::Translator do
             )
         end
     end
+
+    it 'raises CarStalker::UnsupportedSpecError if validation of Range options'\
+       ' fail' do
+      specs = { engine_capacity_from: 700, # Less than 800 not supported.
+                engine_capacity_to:   700, # Less than 800 not supported.
+                kilometrage_from: 250_001, # More than 250_000 not supported.
+                kilometrage_to:   250_001, # More than 250_000 not supported.
+                year_from: 1050, # Less than 1985 not supported.
+                year_to:   1050, # Less than 1985 not supported.
+                price_from: 50,  # Less than 150 not supported.
+                price_to:   50 } # Less than 150 not supported.
+      expect { described_class.translate(specs, :autoplius) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              engine_capacity_from: 'Must be in range 800..5600',
+              engine_capacity_to: 'Must be in range 800..5600',
+              kilometrage_from: 'Must be in range 0..250000',
+              kilometrage_to:   'Must be in range 0..250000',
+              year_from: 'Must be in range 1985..2017',
+              year_to:   'Must be in range 1985..2017',
+              price_from: 'Must be in range 150..60000',
+              price_to:   'Must be in range 150..60000'
+            )
+        end
+    end
   end
 
   describe 'autogidas' do
@@ -120,6 +148,34 @@ describe CarStalker::Translator do
           expect(error.details)
             .to eq(
               model: "Model '#{specs[:model]}' is not supported by 'autogidas'."
+            )
+        end
+    end
+
+    it 'raises CarStalker::UnsupportedSpecError if validation of Range options'\
+       ' fail' do
+      specs = { engine_capacity_from: 700, # Less than 0.8 not supported.
+                engine_capacity_to:   700, # Less than 0.8 not supported.
+                kilometrage_from: 250_001, # More than 250_000 not supported.
+                kilometrage_to:   250_001, # More than 250_000 not supported.
+                year_from: 1050, # Less than 1985 not supported.
+                year_to:   1050, # Less than 1985 not supported.
+                price_from: 50,  # Less than 150 not supported.
+                price_to:   50 } # Less than 150 not supported.
+      expect { described_class.translate(specs, :autogidas) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              engine_capacity_from: 'Must be in range 0.8..6.0',
+              engine_capacity_to: 'Must be in range 0.8..6.0',
+              kilometrage_from: 'Must be in range 0..250000',
+              kilometrage_to:   'Must be in range 0..250000',
+              year_from: 'Must be in range 1985..2017',
+              year_to:   'Must be in range 1985..2017',
+              price_from: 'Must be in range 150..60000',
+              price_to:   'Must be in range 150..60000'
             )
         end
     end
