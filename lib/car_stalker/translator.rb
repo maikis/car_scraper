@@ -80,17 +80,22 @@ module CarStalker
           end
         end
 
-        car_specs.each do |spec, value|
+        car_specs.each do |spec, option|
           next if spec == :make
           next if spec == :model
 
-          options = car_spec_data(spec, website).fetch(:options, {})
-          value   = car_specs[spec]
+          all_options = car_spec_data(spec, website).fetch(:options, {})
+          option      = car_specs[spec]
 
-          case options
+          case all_options
           when Range
-            next if options.include?(value)
-            details[spec] = "Must be in range #{options}"
+            next if all_options.include?(option)
+            details[spec.to_sym] = "Must be in range #{all_options}"
+          when Hash
+            next if all_options.keys.include?(option)
+            details[spec.to_sym] = "Value '#{option}' is not supported. Please"\
+                                   ' consult the documentation for supported'\
+                                   ' values.'
           end
         end
 
