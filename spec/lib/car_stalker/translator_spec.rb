@@ -15,17 +15,44 @@ describe CarStalker::Translator do
     end
   end
 
+  common_specs = { engine_capacity_from: 800,
+                   engine_capacity_to: 5600,
+                   power_from: '44 kW (60 AG)',
+                   power_to: '334 kW (454 AG)',
+                   kilometrage_from: 0,
+                   kilometrage_to: 250_000,
+                   year_from: 1985,
+                   year_to: 2017,
+                   price_from: 150,
+                   price_to: 60_000,
+                   driven_wheels: :rwd,
+                   damaged: :no,
+                   fuel_type: :petrol,
+                   gearbox: :automatic,
+                   body_type: :hatchback,
+                   steering_wheel_side: :lhd }
+
   describe 'autoplius' do
     it 'translates specs using specified options' do
-      specs = { damaged: :no,
-                fuel_type: :petrol,
-                gearbox: :automatic,
-                body_type: :hatchback }
-      expect(described_class.translate(specs, :autoplius).fetch(:autoplius))
-        .to eq(has_damaged_id: 'No damages',
+      expect(described_class
+               .translate(common_specs, :autoplius)
+               .fetch(:autoplius))
+        .to eq(engine_capacity_from: 800,
+               engine_capacity_to: 5600,
+               power_from: '44 kW (60 AG)',
+               power_to: '334 kW (454 AG)',
+               kilometrage_from: 0,
+               kilometrage_to: 250_000,
+               make_date_from: 1985,
+               make_date_to: 2017,
+               sell_price_from: 150,
+               sell_price_to: 60_000,
+               wheel_drive_id: 'Rear wheel drive (RWD)',
+               has_damaged_id: 'No damages',
                fuel_id: 'Petrol',
                gearbox_id: 'Automatic',
-               body_type_id: 'Hatchback')
+               body_type_id: 'Hatchback',
+               steering_wheel_id: 'Left hand drive (LHD)')
     end
 
     it 'raises CarStalker::UnsupportedSpecError if make is not supported' do
@@ -150,15 +177,25 @@ describe CarStalker::Translator do
 
   describe 'autogidas' do
     it 'translates specs using specified options' do
-      specs = { damaged: :no,
-                fuel_type: :petrol,
-                gearbox: :automatic,
-                body_type: :hatchback }
-      expect(described_class.translate(specs, :autogidas).fetch(:autogidas))
-        .to eq(f_46: 'Be defektų',
+      expect(described_class
+               .translate(common_specs, :autogidas)
+               .fetch(:autogidas))
+        .to eq(f_61: 800,
+               f_62: 5600,
+               f_63: '44 kW (60 AG)',
+               f_64: '334 kW (454 AG)',
+               f_65: 0,
+               f_66: 250_000,
+               f_41: 1985,
+               f_42: 2017,
+               f_215: 150,
+               f_216: 60_000,
+               f_12: 'Galiniai varantys ratai',
+               f_46: 'Be defektų',
                f_2: 'Benzinas',
                f_10: 'Automatinė',
-               f_3: 'Hečbekas')
+               f_3: 'Hečbekas',
+               f_265: 'Kairėje')
     end
 
     it 'raises CarStalker::UnsupportedSpecError if make is not supported' do

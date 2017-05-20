@@ -89,7 +89,13 @@ module CarStalker
 
           case all_options
           when Range
-            next if all_options.include?(option)
+            if website == :autogidas &&
+               (spec == :engine_capacity_from || spec == :engine_capacity_to)
+              option *= 0.001
+              next if all_options.include?(option)
+            elsif all_options.include?(option)
+              next
+            end
             details[spec.to_sym] = "Must be in range #{all_options}"
           when Hash
             next if all_options.keys.include?(option)
