@@ -50,9 +50,9 @@ module CarStalker
 
       def translate_value(value, options)
         options.fetch(value.to_sym)
-        # TODO: Raise error if option not found.
       end
 
+      # TODO: Method is too big. Construct better structure of validation.
       def validate_specs(car_specs, website)
         details = {}
         message = 'Unsupported spec.'
@@ -93,6 +93,11 @@ module CarStalker
             details[spec.to_sym] = "Must be in range #{all_options}"
           when Hash
             next if all_options.keys.include?(option)
+            details[spec.to_sym] = "Value '#{option}' is not supported. Please"\
+                                   ' consult the documentation for supported'\
+                                   ' values.'
+          when Array
+            next if all_options.include?(option)
             details[spec.to_sym] = "Value '#{option}' is not supported. Please"\
                                    ' consult the documentation for supported'\
                                    ' values.'

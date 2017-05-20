@@ -127,6 +127,25 @@ describe CarStalker::Translator do
             )
         end
     end
+
+    it 'raises CarStalker::UnsupportedSpecError if validation of Array options'\
+       ' fail' do
+      # All the following specs are unsupported.
+      specs = { power_from: 'not_enough_power',
+                power_to: 'super_power' }
+      expect { described_class.translate(specs, :autoplius) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              power_from: "Value 'not_enough_power' is not supported. Please"\
+                          ' consult the documentation for supported values.',
+              power_to: "Value 'super_power' is not supported. Please consult"\
+                        ' the documentation for supported values.'
+            )
+        end
+    end
   end
 
   describe 'autogidas' do
@@ -208,6 +227,57 @@ describe CarStalker::Translator do
               year_to:   'Must be in range 1985..2017',
               price_from: 'Must be in range 150..60000',
               price_to:   'Must be in range 150..60000'
+            )
+        end
+    end
+
+    it 'raises CarStalker::UnsupportedSpecError if validation of Hash options'\
+       ' fail' do
+      # All the following specs are unsupported.
+      specs = { damaged: 'slightly',
+                fuel_type: 'atomic_energy',
+                gearbox: 'unsupported',
+                body_type: 'unidentified',
+                driven_wheels: 'unknown',
+                steering_wheel_side: 'variable' }
+      expect { described_class.translate(specs, :autogidas) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              damaged: "Value 'slightly' is not supported. Please consult the"\
+                       ' documentation for supported values.',
+              fuel_type: "Value 'atomic_energy' is not supported. Please"\
+                         ' consult the documentation for supported values.',
+              gearbox: "Value 'unsupported' is not supported. Please consult"\
+                       ' the documentation for supported values.',
+              body_type: "Value 'unidentified' is not supported. Please"\
+                         ' consult the documentation for supported values.',
+              driven_wheels: "Value 'unknown' is not supported. Please consult"\
+                             ' the documentation for supported values.',
+              steering_wheel_side: "Value 'variable' is not supported. Please"\
+                                   ' consult the documentation for supported'\
+                                   ' values.'
+            )
+        end
+    end
+
+    it 'raises CarStalker::UnsupportedSpecError if validation of Array options'\
+       ' fail' do
+      # All the following specs are unsupported.
+      specs = { power_from: 'not_enough_power',
+                power_to: 'super_power' }
+      expect { described_class.translate(specs, :autogidas) }
+        .to raise_error do |error|
+          expect(error).to be_a(CarStalker::UnsupportedSpecError)
+          expect(error.message).to eq('Unsupported spec.')
+          expect(error.details)
+            .to eq(
+              power_from: "Value 'not_enough_power' is not supported. Please"\
+                          ' consult the documentation for supported values.',
+              power_to: "Value 'super_power' is not supported. Please consult"\
+                        ' the documentation for supported values.'
             )
         end
     end
