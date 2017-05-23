@@ -17,9 +17,8 @@ module CarStalker
     end
 
     def get_links(car_specs)
-      translated_specs = CarStalker::Translator
-                         .translate(car_specs)
-                         .fetch(:autogidas)
+      translated_specs = CarStalker::Translator.translate(car_specs, :autogidas)
+                           .fetch(:autogidas, {})
       scrape_results(translated_specs)
     end
 
@@ -49,9 +48,7 @@ module CarStalker
         next if visited.include?(page)
         page_body = mechanic.get(page).body
         visited << page
-        puts 'before sleep'
         sleep(2)
-        puts 'after sleep'
         nokogiri_body = to_nokogiri_page(page_body)
         all_links << ad_links(nokogiri_body)
         to_visit = pg_links(nokogiri_body)

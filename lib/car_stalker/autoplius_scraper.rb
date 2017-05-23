@@ -22,7 +22,8 @@ module CarStalker
     end
 
     def get_links(car_specs)
-      car_specs = CarStalker::Translator.translate(car_specs).fetch(:autoplius)
+      car_specs = CarStalker::Translator.translate(car_specs, :autoplius)
+                    .fetch(:autoplius, {})
       # TODO: raise proper error when specs are missing.
       @link_matcher = car_specs[:make_id_list]
       scrape_with_pagination(main_page_html(car_specs))

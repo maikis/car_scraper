@@ -21,7 +21,9 @@ require 'car_stalker/errors'
 #
 module CarStalker
   def self.get_links(car_specs)
-    CarStalker::AutopliusScraper.new.get_links(car_specs)
-    CarStalker::AutogidasScraper.new.get_links(car_specs)
+    links = []
+    links << CarStalker::AutopliusScraper.new.get_links(car_specs)
+    links << CarStalker::AutogidasScraper.new.get_links(car_specs)
+    links.flatten
   end
 end
