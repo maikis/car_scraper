@@ -59,9 +59,11 @@ results = CarStalker.get_links(car_specs)
 
 ```
   make:
-    You can find available makes in car_stalker/data/*_models.rb, where * is website's name (currently `autogidas` or `autoplius`)
+    You can find available makes in car_stalker/data/*_models.rb,
+    where * is website's name (currently `autogidas` or `autoplius`)
   model:
-    You can find available makes in car_stalker/data/*_models.rb, where * is website's name (currently `autogidas` or `autoplius`)
+    You can find available makes in car_stalker/data/*_models.rb,
+    where * is website's name (currently `autogidas` or `autoplius`)
   engine_capacity_from:
     (800..5600)
   engine_capacity_to:
@@ -149,7 +151,7 @@ results = CarStalker.get_links(car_specs)
 
 ## DONE
 
-####v0.1.1
+#### v0.1.1
   * Written proper translation layer from human language to html selector id's
   * Added support for autogidas.lt
   * Added spec validation for translator
