@@ -48,6 +48,7 @@ module CarStalker
         next if visited.include?(page)
         page_body = mechanic.get(page).body
         visited << page
+        # Respect the site's crawl-delay requirements (robots.txt).
         sleep(2)
         nokogiri_body = to_nokogiri_page(page_body)
         all_links << ad_links(nokogiri_body)

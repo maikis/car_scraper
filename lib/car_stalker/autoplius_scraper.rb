@@ -23,7 +23,7 @@ module CarStalker
 
     def get_links(car_specs)
       car_specs = CarStalker::Translator.translate(car_specs, :autoplius)
-                    .fetch(:autoplius, {})
+                                        .fetch(:autoplius, {})
       # TODO: raise proper error when specs are missing.
       @link_matcher = car_specs[:make_id_list]
       scrape_with_pagination(main_page_html(car_specs))
@@ -71,11 +71,13 @@ module CarStalker
       session.within(:xpath, pagination_ul_xpath) do
         session.click_on(page_number)
       end
+      # Respect the site's crawl-delay requirements (robots.txt).
       sleep(2)
     end
 
     def visit_search_form_page
       session.visit(starting_page)
+      # Respect the site's crawl-delay requirements (robots.txt).
       sleep(2)
     end
 
@@ -92,7 +94,7 @@ module CarStalker
 
     def renew_pagination_list
       nokogiri_page = to_nokogiri_page(session.html)
-      @all_pages = page_numbers(nokogiri_page)
+      @all_pages =  page_numbers(nokogiri_page)
       @all_pages -= visited_pages
     end
 

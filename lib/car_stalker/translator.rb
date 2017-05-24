@@ -6,6 +6,8 @@ module CarStalker
     class << self
       def translate(car_specs, website)
         validate_specs(car_specs, website)
+        # TODO: Convert engine_capacity from cc, to liters for autogidas instead
+        # of just doing that when validating.
         translated_specs = {}
         car_specs.each do |spec, value|
           translated_specs = translate_spec(spec,
@@ -26,7 +28,6 @@ module CarStalker
         if spec == :make
           return value
         elsif spec == :model
-          # TODO: Validate model
           return value
         end
 
